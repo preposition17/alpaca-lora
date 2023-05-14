@@ -10,10 +10,13 @@ from transformers import LlamaForCausalLM, LlamaTokenizer
 parser = argparse.ArgumentParser(description='Script for processing BASE_MODEL and LORA_MODEL.')
 parser.add_argument('--base_model', required=True, help='Specify the BASE_MODEL value')
 parser.add_argument('--lora_model', required=True, help='Specify the LORA_MODEL value')
+parser.add_argument('--max_shard_size', default='10GB', help='Specify the maximum shard size (default: 10GB)')
+
 args = parser.parse_args()
 
 BASE_MODEL = args.base_model
 LORA_MODEL = args.lora_model
+MAX_SHARD_SIZE = args.max_shard_size
 
 tokenizer = LlamaTokenizer.from_pretrained(BASE_MODEL)
 
@@ -56,5 +59,5 @@ deloreanized_sd = {
 }
 
 LlamaForCausalLM.save_pretrained(
-    base_model, "./hf_ckpt", state_dict=deloreanized_sd, max_shard_size="400MB"
+    base_model, "./hf_ckpt", state_dict=deloreanized_sd, max_shard_size=MAX_SHARD_SIZE
 )
